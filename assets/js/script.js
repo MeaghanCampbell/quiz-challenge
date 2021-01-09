@@ -1,4 +1,4 @@
-// selecting the start quiz button parent element from the DOM
+// selecting the start button to click
 let startQuizBtnEl = document.querySelector("#start-quiz");
 
 // Question Array
@@ -29,6 +29,11 @@ let questions = [
     }
 ];
 
+// Array with correct answers
+let questOneCorrect = questions[0].choiceA;
+let questTwoCorrect = questions[1].choiceC;
+let questThreeCorrect = questions[2].choiceA
+
 // function to start the quiz
 let startQuiz = function (event) {
 
@@ -36,12 +41,19 @@ let startQuiz = function (event) {
     var targetEl = event.target;
 
     if (targetEl.matches(".btn")) {
-        console.log('start quiz', targetEl);
-        runQuestions();
+        runFirstQuestion();
     }
 }
 
-let runQuestions = function () {
+let runFirstQuestion = function () {
+
+    // remove start button and paragraph text
+    var startParaText = document.querySelector("#start-paragraph")
+    startParaText.textContent = '';
+
+    var removeStartButton = document.querySelector("#start-btn");
+    removeStartButton.remove();
+    
     // select question title and add text from questions array
     var questionTitleEl = document.querySelector("#question-title");
     questionTitleEl.textContent = questions[0].question
@@ -66,18 +78,53 @@ let runQuestions = function () {
     choiceThreeEl.className = "btn";
     choiceThreeEl.setAttribute("id", "choice-content");
     document.getElementById("choices").appendChild(choiceThreeEl);
-
-    // how to loop through questions & target all buttons?
-
-    /* for (i = 0; i < questions.length; i++) {
-        i += questions.question[i] 
-    } */
+    
+    nextQuestion();
 
 }
 
+let nextQuestion = function (event) {
+
+    // targets second button question choice
+    var targetQ = event.target;
+
+    if (targetQ.matches(".btn")) {
+        runNextQuestion();
+    }
+}
+
+let runNextQuestion = function () {
+    // select question title and add text from questions array
+    
+    var secondQuestionTitleEl = document.querySelector("#question-title");
+    secondQuestionTitleEl.textContent = questions[1].question
+
+    // create choice A
+    var secondChoiceOneEl = document.querySelector("#choice-content");
+    secondChoiceOneEl.textContent = questions[1].choiceA
+    document.getElementById("choices").appendChild(secondChoiceOneEl);
+
+    // create choice B
+    var secondChoiceTwoEl = document.querySelector("#choice-content");
+    secondChoiceTwoEl.textContent = questions[1].choiceB
+    document.getElementById("choices").appendChild(secondChoiceTwoEl);
+
+    // create choice C
+    var secondChoiceThreeEl = document.querySelector("#choice-content");
+    secondChoiceThreeEl.textContent = questions[1].choiceC
+    document.getElementById("choices").appendChild(secondChoiceTwoEl);
+
+}
+
+
+
+
 // let them know answer is correct with function?
 
+// listening for second question button click to move to last
+startQuizBtnEl.addEventListener("click", nextQuestion);
 
-// listening for the start button click
+// listening for the start button click to move to first question
 startQuizBtnEl.addEventListener("click", startQuiz);
+
   
