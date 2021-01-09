@@ -1,5 +1,6 @@
 // selecting the start button to click
 let startQuizBtnEl = document.querySelector("#start-quiz");
+var nextButton = document.querySelector("#next-btn");
 
 // Question Array
 let questions = [
@@ -79,10 +80,34 @@ let runFirstQuestion = function () {
     let firstAnswerClick = document.querySelector("#first-choice")
     let secondAnswerClick = document.querySelector("#second-choice")
     let thirdAnswerClick = document.querySelector("#third-choice")
-    firstAnswerClick.addEventListener("click", checkCorrect);
-    secondAnswerClick.addEventListener("click", checkWrong);
-    thirdAnswerClick.addEventListener("click", checkWrong);
+    firstAnswerClick.addEventListener("click", checkFirstCorrect);
+    secondAnswerClick.addEventListener("click", checkFirstWrong);
+    thirdAnswerClick.addEventListener("click", checkFirstWrong);
 
+
+}
+
+let checkFirstCorrect = function() {
+
+    let correctAnswer = document.querySelector("#check-answer")
+    correctAnswer.textContent = 'CORRECT!'
+
+    var nextButton = document.querySelector("#next-btn");
+    nextButton.textContent = 'Next Question'
+    nextButton.className = "btn";
+
+    nextButton.addEventListener("click", runNextQuestion);
+}
+
+let checkFirstWrong = function() {
+
+let correctAnswer = document.querySelector("#check-answer")
+correctAnswer.textContent = 'WRONG!'
+
+nextButton.textContent = 'Next Question'
+nextButton.className = "btn";
+
+nextButton.addEventListener("click", runNextQuestion);
 
 }
 
@@ -112,10 +137,31 @@ let runNextQuestion = function () {
     let firstAnswerClick = document.querySelector("#first-choice")
     let secondAnswerClick = document.querySelector("#second-choice")
     let thirdAnswerClick = document.querySelector("#third-choice")
-    firstAnswerClick.addEventListener("click", checkWrong);
-    secondAnswerClick.addEventListener("click", checkWrong);
-    thirdAnswerClick.addEventListener("click", checkCorrect);
+    firstAnswerClick.addEventListener("click", checkSecondWrong);
+    secondAnswerClick.addEventListener("click", checkSecondWrong);
+    thirdAnswerClick.addEventListener("click", checkSecondCorrect);
 
+
+}
+
+let checkSecondCorrect = function() {
+
+    let correctAnswer = document.querySelector("#check-answer")
+    correctAnswer.textContent = 'CORRECT!'
+
+    var nextButton = document.querySelector("#next-btn");
+
+    nextButton.addEventListener("click", runLastQuestion);
+}
+
+let checkSecondWrong = function() {
+
+let correctAnswer = document.querySelector("#check-answer")
+correctAnswer.textContent = 'WRONG!'
+
+var nextButton = document.querySelector("#next-btn");
+
+nextButton.addEventListener("click", runLastQuestion);
 
 }
 
@@ -142,35 +188,44 @@ let runLastQuestion = function () {
     thirdChoiceThreeEl.textContent = questions[2].choiceC
     document.getElementById("choices").appendChild(thirdChoiceThreeEl);
 
+    let firstAnswerClick = document.querySelector("#first-choice")
+    let secondAnswerClick = document.querySelector("#second-choice")
+    let thirdAnswerClick = document.querySelector("#third-choice")
+    firstAnswerClick.addEventListener("click", checkLastWrong);
+    secondAnswerClick.addEventListener("click", checkLastCorrect);
+    thirdAnswerClick.addEventListener("click", checkLastWrong);
+
+
+}
+
+let checkLastCorrect = function() {
+
+    let correctAnswer = document.querySelector("#check-answer")
+    correctAnswer.textContent = 'CORRECT!'
+
+    var nextButton = document.querySelector("#next-btn");
+
+    nextButton.addEventListener("click", showScore);
+}
+
+let checkLastWrong = function() {
+
+let correctAnswer = document.querySelector("#check-answer")
+correctAnswer.textContent = 'WRONG!'
+
+var nextButton = document.querySelector("#next-btn");
+
+nextButton.addEventListener("click", showScore);
+
+}
+
+let showScore = function() {
+    console.log('congrats! you finished the quiz')
 }
 
 
 // let them know answer is correct with function?
 
-let checkCorrect = function() {
-
-        let correctAnswer = document.querySelector("#check-answer")
-        correctAnswer.textContent = 'CORRECT!'
-
-        var nextButton = document.querySelector("#next-btn");
-        nextButton.textContent = 'Next Question'
-        nextButton.className = "btn";
-
-        nextButton.addEventListener("click", runNextQuestion);
-}
-
-let checkWrong = function() {
-
-    let correctAnswer = document.querySelector("#check-answer")
-    correctAnswer.textContent = 'WRONG!'
-
-    var nextButton = document.querySelector("#next-btn");
-    nextButton.textContent = 'Next Question'
-    nextButton.className = "btn";
-
-    nextButton.addEventListener("click", runNextQuestion);
-
-}
 
 // listening for the start button click to move to first question
 startQuizBtnEl.addEventListener("click", startQuiz);
