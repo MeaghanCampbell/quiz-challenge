@@ -101,7 +101,7 @@ let showNextQuestion = function() {
  let answerSelected = function() {
 
     // Unsure of this part...
-    if (answer === true) {
+    if (correctAnswers) {
         let answerMsg = document.querySelector("#check-answer")
         answerMsg.textContent = 'CORRECT!' 
     } else {
