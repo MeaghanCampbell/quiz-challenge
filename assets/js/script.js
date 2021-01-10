@@ -1,12 +1,13 @@
-let startQuizBtnEl = document.querySelector("#start-quiz");
+let startQuizBtnEl = document.querySelector("#start-btn");
+var countdownEl = document.getElementById('countdown');
 let questionNum = 0;
 
 let questions = [
     {
         question: "Which HTML element contains JavaScript?",
-            choiceA: "<script>",
-            choiceB: "<link>",
-            choiceC: "<meta>",
+        choiceA: "<script>",
+        choiceB: "<link>",
+        choiceC: "<meta>",
     },
     {
         question: "What are Javascript Arrays wrapped in?",
@@ -28,6 +29,8 @@ let questions = [
     }
 ];
 
+let correctAnswers = [questions[0].choiceA, questions[1].choiceC, questions[2].choiceB, questions[3].choiceA]
+
 let lastQuestion = questions.length - 1
 
 
@@ -40,6 +43,21 @@ let startQuiz = function (event) {
     if (targetEl.matches("#start-btn")) {
         removeStartButton();
     }
+};
+
+function countdown() {
+    var timeLeft = 30;
+
+    var timeInterval = setInterval(function() {
+        if (timeLeft > 0) {
+            countdownEl.textContent = 'Time Remaining: ' + timeLeft;
+            timeLeft--;
+        } else {
+            countdownEl.textContent = '';
+            clearInterval(timeInterval)
+            endQuiz();
+        }
+    },1000);
 };
 
 let removeStartButton = function() {
@@ -80,11 +98,18 @@ let showNextQuestion = function() {
 
  };
  
- let answerSelected = function(answer) {
+ let answerSelected = function() {
 
-    let correctAnswer = document.querySelector("#check-answer")
-    correctAnswer.textContent = 'CORRECT!'
+    // Unsure of this part...
+    if (answer === true) {
+        let answerMsg = document.querySelector("#check-answer")
+        answerMsg.textContent = 'CORRECT!' 
+    } else {
+        let answerMsg = document.querySelector("#check-answer")
+        answerMsg.textContent = 'WRONG!'
+    }
 
+    // moves to next question or ends quiz
     if (questionNum >= lastQuestion) {
         endQuiz();
     } else {
@@ -98,8 +123,10 @@ let showNextQuestion = function() {
     console.log('you made it to the end of the quiz!')
  };
 
+
  // listening for the start button click to move to first question
 startQuizBtnEl.addEventListener("click", startQuiz);
+startQuizBtnEl.onclick = countdown;
 
 
 
