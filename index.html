@@ -11,10 +11,17 @@
 <body>
     <div class="timer" id="time-remaining">
         <p id="countdown"></p>
-        <p class="scores" id="high-scores">View High Scores</p>
+        <div class="scores">
+            <p class="high-scores-title" id="high-scores">View High Scores</p>
+            <ul id="high-scores-container">
+            </ul>
+        </div>
     </div>
     <div class="start" id="start-quiz">
         <h1 class="title" id="question-title">Welcome to the JavaScript Coding Challenge!</h1>
+        <p id="save-your-score"></p>
+        <div id="form"></div>
+        <div id="form-button"></div>
         <button class="btn" id="start-btn" type="click">Start Quiz</button>
         <div class="choice-options" id="choices">
             <button id="choice-a"></button>

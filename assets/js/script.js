@@ -32,6 +32,8 @@ let questions = [
 let correctAnswers = [questions[0].choiceA, questions[1].choiceC, questions[2].choiceB, questions[3].choiceA]
 
 let lastQuestion = questions.length - 1
+var timeLeft = 30;
+var timeInterval = '';
 
 
 // function to start the quiz
@@ -41,14 +43,13 @@ let startQuiz = function (event) {
     var targetEl = event.target;
 
     if (targetEl.matches("#start-btn")) {
+        timeInterval = setInterval(countdown, 1000)
         removeStartButton();
     }
 };
 
 function countdown() {
-    var timeLeft = 30;
 
-    var timeInterval = setInterval(function() {
         if (timeLeft > 0) {
             countdownEl.textContent = 'Time Remaining: ' + timeLeft;
             timeLeft--;
@@ -57,8 +58,8 @@ function countdown() {
             clearInterval(timeInterval)
             endQuiz();
         }
-    },1000);
 };
+
 
 let removeStartButton = function() {
   // remove start button
@@ -98,16 +99,17 @@ let showNextQuestion = function() {
 
  };
  
- let answerSelected = function() {
+ let answerSelected = function(e) {
 
-    // Unsure of this part...
-    if (correctAnswers) {
-        let answerMsg = document.querySelector("#check-answer")
-        answerMsg.textContent = 'CORRECT!' 
-    } else {
-        let answerMsg = document.querySelector("#check-answer")
-        answerMsg.textContent = 'WRONG!'
-    }
+   // Check Answer
+   if (correctAnswers[questionNum] === e.target.textContent) {
+       let answerMsg = document.querySelector("#check-answer")
+       answerMsg.textContent = 'CORRECT!' 
+   } else {
+       let answerMsg = document.querySelector("#check-answer")
+       answerMsg.textContent = 'WRONG!'
+       timeLeft = timeLeft - 5;
+   }
 
     // moves to next question or ends quiz
     if (questionNum >= lastQuestion) {
@@ -117,28 +119,79 @@ let showNextQuestion = function() {
         showNextQuestion();
     }
  };
+
+ // how do I stop the timer if it is still running
  
  let endQuiz = function() {
-    //this function runs if an answer is selected, and there are no more questions to ask!
     console.log('you made it to the end of the quiz!')
+
+    var questionTitleEl = document.querySelector("#question-title");
+    questionTitleEl.textContent = 'Your final score is ' + timeLeft;
+
+    clearInterval(timeInterval);
+
+    var removeFirstChoice = document.querySelector("#choice-a");
+    removeFirstChoice.remove();
+
+    var removeSecondChoice = document.querySelector("#choice-b");
+    removeSecondChoice.remove();
+
+    var removeThirdChoice = document.querySelector("#choice-c");
+    removeThirdChoice.remove();
+
+    // save your score form
+    var saveScoreForm = document.createElement("input");
+    saveScoreForm.setAttribute("type", "text");
+    saveScoreForm.setAttribute("placeholder", "Enter Your Initials");
+    saveScoreForm.setAttribute("id", "enter-initials");
+    document.querySelector("#form").appendChild(saveScoreForm);
+
+    var saveScoreButton = document.createElement('button');
+    saveScoreButton.className = "btn";
+    saveScoreButton.textContent = "Save your score"
+    saveScoreButton.setAttribute("type", "submit");
+    saveScoreButton.setAttribute("id", "save-score");
+    document.querySelector("#form-button").appendChild(saveScoreButton)
+
+    let saveScoreBtnEl = document.querySelector("#save-score")
+    saveScoreBtnEl.addEventListener("click", saveLocalStorage)
+
  };
 
+ let saveLocalStorage = function() {
 
- // listening for the start button click to move to first question
+    var questionTitleEl = document.querySelector("#question-title");
+    questionTitleEl.textContent = 'Thanks for playing!'
+
+    var initials = document.getElementById('enter-initials');
+    var getInitials = initials.value
+    localStorage.setItem("initials", getInitials)
+
+    var score = timeLeft
+    localStorage.setItem("score", score)
+
+    var viewHighScores = document.querySelector("#high-scores");
+    viewHighScores.addEventListener("click", updateHighScores)
+    
+ }
+
+ let updateHighScores = function() {
+
+    var getInitials = localStorage.getItem('initials')
+    var getHighScore = localStorage.getItem('score')
+
+    var showHighScores = document.createElement("li")
+    showHighScores.textContent = getInitials + ':' + getHighScore
+    document.getElementById('high-scores-container').appendChild(showHighScores)
+
+    
+     // attach to clicking of high scores
+ }
+
+
+
+
+ // listening for the start button click to move to first question & start countdown
 startQuizBtnEl.addEventListener("click", startQuiz);
-startQuizBtnEl.onclick = countdown;
+// startQuizBtnEl.onclick = countdown;
 
-
-
-
-
-/* the answerSlected function should receive the answer clicked
-6:09
-Here's how I envision it...
-6:09
-when your choice buttons are created and rendered, we'd give them the onclick function something like this
-6:11
-choiceButton.addEventListener("click", function(event){
-  var answer = event.target.textcontent //or something similar to that
-  answerSelected(answer)
-}) */
